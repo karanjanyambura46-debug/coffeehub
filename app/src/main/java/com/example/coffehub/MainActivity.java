@@ -3,6 +3,7 @@ package com.example.coffehub;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
 
     EditText name, id, email;
 
@@ -37,10 +40,17 @@ public class MainActivity extends AppCompatActivity {
         String lid = id.getText().toString().trim();
         String lemail = email.getText().toString().trim();
 
-        // Send Email
-        sendmail(lname, lid, lemail);
+        if (lname.isEmpty() || lid.isEmpty() || lemail.isEmpty()) {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            Log.w(TAG, "Firebase save blocked: one or more fields are empty");
+            return;
+        }
+
         // Save to Firebase
         fireBase(lname, lid, lemail);
+
+        // Send Email
+        sendmail(lname, lid, lemail);
     }
 
     // EMAIL INTENT
@@ -62,20 +72,27 @@ public class MainActivity extends AppCompatActivity {
         Pojo item = new Pojo(lname, lid, lemail);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-        DatabaseReference myRef = database.getReference(lid);
+        DatabaseReference myRef = database.getReference("subscribers").child(lid);
 
         // Save data
-        myRef.setValue(item);
+        myRef.setValue(item)
+                .addOnSuccessListener(unused -> {
+                    Log.d(TAG, "Firebase save successful for ID: " + lid);
+                    Toast.makeText(this,
+                            "Saved Successfully",
+                            Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(error -> {
+                    Log.e(TAG, "Firebase save failed for ID: " + lid, error);
+                    Toast.makeText(this,
+                            "Save Failed: " + error.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                });
 //        myRef.push().setValue(
 //                "Name: " + lname +
 //                        ", ID: " + lid +
 //                        ", Email: " + lemail
 //        );
-
-        Toast.makeText(this,
-                "Saved Successfully",
-                Toast.LENGTH_SHORT).show();
     }
 
     // CANCEL BUTTON
@@ -106,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else  if(item.getItemId()==R.id.view)
         {
-            Intent intent = new Intent(getApplicationContext(),View.class);
+            Intent intent = new Intent(getApplicationContext(), ViewActivity.class);
             startActivity(intent);
             return true;
         }
@@ -121,4 +138,3 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-

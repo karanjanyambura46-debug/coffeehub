@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.COFFEHUB">
         <activity
-            android:name=".View"
+            android:name=".ViewActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
