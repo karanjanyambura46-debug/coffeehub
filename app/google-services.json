@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "88728748318",
+    "project_id": "coffe-hub-d682c",
+    "storage_bucket": "coffe-hub-d682c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:88728748318:android:bba8e04293528348d3c90f",
+        "android_client_info": {
+          "package_name": "com.example.coffehub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaGnTbN5KsHw_3dx9kCpMb0dT3Umn2M68"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
